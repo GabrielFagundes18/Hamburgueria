@@ -5,7 +5,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-
         {/* Logo */}
         <div className="footer-logo">
           NINJA<span>BURGER</span>
@@ -15,11 +14,11 @@ const Footer = () => {
         <div className="footer-links">
           <h4>Links Rápidos</h4>
           <a href="#Hero">Home</a>
-        <a href="#menu">Menu</a>
-        <a href="#Sobre">Sobre</a>
-        <a href="#comoPedir">Como Pedir</a>
-        <a href="#galeria">Galeria</a>
-        <a href="#contato">Contato</a>
+          <a href="#menu">Menu</a>
+          <a href="#Sobre">Sobre</a>
+          <a href="#comoPedir">Como Pedir</a>
+          <a href="#galeria">Galeria</a>
+          <a href="#contato">Contato</a>
         </div>
 
         {/* Contato */}
@@ -34,16 +33,28 @@ const Footer = () => {
         <div className="footer-social">
           <h4>Siga-nos</h4>
           <div className="social-icons">
-            <a href="#"><FaFacebookF /></a>
-            <a href="#"><FaInstagram /></a>
-            <a href="#"><FaWhatsapp /></a>
+            <button
+              onClick={() => alert("Link do Instagram ainda não disponível")}
+            >
+              <FaInstagram/>
+            </button>
+            <button
+              onClick={() => alert("Link do Facebook ainda não disponível")}
+            >
+                <FaFacebookF/>
+            </button>
+            <button
+              onClick={() => alert("Link do WhatsApp ainda não disponível")}
+            >
+              <FaWhatsapp/>
+            </button>
           </div>
         </div>
-
       </div>
 
       <div className="footer-bottom">
-        &copy; {new Date().getFullYear()} Ninja Burger. Todos os direitos reservados.
+        &copy; {new Date().getFullYear()} Ninja Burger. Todos os direitos
+        reservados.
       </div>
     </footer>
   );
