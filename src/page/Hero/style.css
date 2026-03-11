@@ -1,0 +1,76 @@
+/* Configuração Base (Mobile) */
+.hero {
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(
+    --bg-dark
+  ); 
+}
+
+.hero-overlay {
+ 
+  background: linear-gradient(
+    to right,
+    rgba(10, 10, 10, 0.9),
+    rgba(10, 10, 10, 0.4)
+  );
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.hero-content {
+  text-align: justify;
+  color: var(--text-main); /* Branco Neve oficial */
+}
+
+.hero-content h1 {
+  font-size: 2.6rem;
+  margin-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.hero-content h1 span {
+  color: var(--primary); /* Vermelho Ninja oficial */
+  display: block;
+}
+
+.hero-content p,
+.hero-content h3 {
+  font-size: 1rem;
+  margin-bottom: 25px;
+  color: var(--text-muted); /* Cinza Mudo para leitura confortável */
+}
+
+/* Desktop / Tablet */
+@media (min-width: 768px) {
+  .hero-content {
+    max-width: 600px;
+    text-align: left;
+  }
+
+  .hero-overlay {
+    justify-content: flex-start;
+    padding-left: 10%;
+    background: linear-gradient(to right, var(--bg-dark) 20%, transparent 80%);
+  }
+
+  .hero-content h1 {
+    font-size: 4rem;
+  }
+
+  .hero-content h1 span {
+    display: inline;
+    margin-left: 15px;
+  }
+}

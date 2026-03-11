@@ -1,0 +1,92 @@
+.menu-destaque {
+  padding: 80px 10%;
+  background: var(--bg-dark);
+  color: var(--text-main);
+}
+
+/* header */
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+
+.menu-header p {
+  color: var(--text-muted);
+}
+
+/* grid */
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+/* card */
+
+.menu-card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.menu-card:hover {
+  transform: translateY(-8px);
+}
+
+/* imagem */
+
+.menu-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+}
+
+/* overlay */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3));
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.overlay h3 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.overlay p {
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+
+
+
+
+.menu-card:hover img {
+  opacity: 0.5;
+  transform: scale(1.05);
+}
+
+.menu-card:hover .overlay {
+  opacity: 1;
+}

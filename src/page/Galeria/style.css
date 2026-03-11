@@ -1,0 +1,161 @@
+/* SECTION */
+
+.galeria-section {
+  padding: 100px 10%;
+  background: #111;
+  color: white;
+}
+
+/* HEADER */
+
+.galeria-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.galeria-header h2 {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.galeria-header span {
+  color: #ff3c38;
+}
+
+.galeria-header p {
+  color: #aaa;
+  margin-top: 10px;
+}
+
+/* GRID */
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 15px;
+  grid-auto-flow: dense;
+}
+
+/* IMAGENS */
+
+.galeria-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: 0.35s ease;
+  cursor: pointer;
+}
+
+/* HOVER */
+
+.galeria-grid img:hover {
+  transform: scale(1.06);
+  filter: brightness(1.1);
+}
+
+/* TAMANHOS */
+
+.grande {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.vertical {
+  grid-row: span 2;
+}
+
+.horizontal {
+  grid-column: span 2;
+}
+
+.normal {
+  grid-column: span 1;
+}
+
+/* BOTÃO */
+
+.galeria-btn {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.galeria-btn button {
+  background: linear-gradient(135deg, #ff3c38, #d62828);
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  font-size: 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.galeria-btn button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(255, 60, 56, 0.4);
+}
+.lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100vh;
+  background:rgba(0,0,0,0.9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  animation:fade 0.3s ease;
+}
+
+.lightbox img{
+  max-width:90%;
+  max-height:85vh;
+  border-radius:10px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+.close{
+  position:absolute;
+  top:40px;
+  right:50px;
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .galeria-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 180px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+  .galeria-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 200px;
+  }
+
+  .grande,
+  .vertical,
+  .horizontal {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
