@@ -11,7 +11,6 @@
   margin-top: 2rem;
 }
 
-/* VARIANTE PRIMARY - GRADIENTE */
 .btn.primary {
   background: linear-gradient(135deg, #ff3c38, #d62828);
   color: white;
@@ -23,7 +22,6 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* VARIANTE SECONDARY - MODERNA */
 .btn.secondary {
   background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
   color: #d62828;
@@ -41,7 +39,6 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
-/* VARIANTE DANGER - EXEMPLO */
 .btn.danger {
   background: linear-gradient(135deg, #ff4c4c, #d62828);
   color: #fff;

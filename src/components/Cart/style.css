@@ -72,3 +72,61 @@
   font-weight: bold;
   cursor: pointer;
 }
+.close-cart {
+  background: transparent;
+  border: none;
+  color: #ff4d4d; 
+  font-size: 2rem; 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 5px;
+  position: absolute; 
+  top: 15px;
+  right: 15px;
+  outline: none;
+}
+
+.close-cart:hover {
+  color: #ff0000;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.6)); 
+}
+
+/* Efeito ao clicar */
+.close-cart:active {
+  transform: scale(0.9);
+}
+.cart-voltar {
+  background: rgba(26, 26, 26, 0.8); 
+  color: #ff0055; 
+  border: 1px solid #e75b5b;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+  
+
+}
+
+.cart-voltar:hover {
+  background: #ff0055;
+  color: #1a1a1a;
+  box-shadow: 0 0 15px #e75b5b;
+  transform: scale(1.1);
+}
+
+.cart-voltar:active {
+  transform: scale(0.9);
+}
+
+.cart-voltar svg {
+  font-size: 1.2rem;
+}

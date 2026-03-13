@@ -1,77 +1,94 @@
-/* --- Cardapio.css --- */
 
+
+/* ==========================================================
+   LAYOUT DA PÁGINA (CARDÁPIO)
+   ========================================================== */
 .cardapio-page {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
   min-height: 100vh;
-  padding: 40px 20px;
-  font-family: "Inter", sans-serif;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* Header & Botão do Carrinho no Topo */
+/* HEADER */
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto 40px;
+  margin-bottom: 30px;
+  position: relative;
 }
 
 .main-header h1 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: aliceblue;
 }
 
 .main-header h1 span {
   color: var(--primary);
+  text-shadow: 0 0 10px rgba(230, 57, 70, 0.5);
 }
 
-.cart-toggle {
+/* BOTÕES DO HEADER */
+.cart-voltar, .cart-toggle {
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: white;
-  padding: 12px 20px;
-  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  position: relative;
   transition: var(--transition);
+  font-size: 1.2rem;
 }
 
-.cart-toggle:hover {
-  border-color: var(--primary);
+.cart-toggle {
+  width: auto;
+  border-radius: 30px;
+  padding: 0 15px;
+  gap: 10px;
 }
 
 .cart-toggle span {
   background: var(--primary);
-  color: white;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 50%;
-  position: absolute;
-  top: -5px;
-  right: -5px;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
-/* Navegação de Filtros (Scroll horizontal no mobile) */
+.cart-voltar:hover, .cart-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+}
+
+/* FILTROS (CATEGORIAS) */
 .filter-nav {
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 50px;
+  gap: 10px;
+  margin-bottom: 40px;
   overflow-x: auto;
-  padding: 10px;
+  padding: 10px 5px;
+  white-space: nowrap;
+  -ms-overflow-style: none;
 }
+
+.filter-nav::-webkit-scrollbar { display: none; }
 
 .filter-nav button {
   background: var(--bg-input);
   color: var(--text-muted);
   border: 1px solid var(--border);
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: 30px;
   cursor: pointer;
-  text-transform: capitalize;
   font-weight: 600;
-  white-space: nowrap;
   transition: var(--transition);
 }
 
@@ -79,19 +96,16 @@
   background: var(--primary);
   color: white;
   border-color: var(--primary);
-  box-shadow: 0 0 15px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
 }
 
-/* Grid de Produtos */
+/* GRID DE PRODUTOS */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 25px;
 }
 
-/* Card Profissional */
 .product-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -110,26 +124,26 @@
 
 .product-card img {
   width: 100%;
-  height: 200px;
+  height: 180px;
   object-fit: cover;
 }
 
 .product-details {
   padding: 20px;
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-details h3 {
-  font-size: 1.3rem;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
 }
 
 .product-details p {
   color: var(--text-muted);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.4;
   margin-bottom: 20px;
   flex-grow: 1;
 }
@@ -141,62 +155,61 @@
 }
 
 .product-footer span {
-  color: var(--accent-gold);
+  color: var(--accent-green);
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
 }
 
 .product-footer button {
   background: var(--primary);
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   font-size: 1.5rem;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.product-footer button:hover {
-  background: var(--primary-hover);
-  transform: scale(1.1);
-}
-
-/* Modal de Finalização */
+/* MODAL DE FINALIZAÇÃO */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3000;
-  backdrop-filter: blur(8px);
+  z-index: 5000;
+  padding: 20px;
 }
 
 .modal-form {
   background: var(--bg-card);
-  padding: 40px;
+  padding: 30px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   width: 100%;
   max-width: 400px;
-  text-align: center;
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .modal-form h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  text-align: center;
   color: var(--primary);
 }
 
 .modal-form input {
   width: 100%;
   padding: 14px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -210,7 +223,7 @@
 
 .modal-btns {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   margin-top: 20px;
 }
 
@@ -218,15 +231,33 @@
   flex: 1;
   padding: 12px;
   border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-muted);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .modal-btns button.confirm {
   background: var(--accent-green);
   color: black;
   border: none;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE (TABLET E DESKTOP)
+   ========================================================== */
+@media (min-width: 768px) {
+  .cardapio-page { padding: 40px; }
+  .main-header h1 { font-size: 2.5rem; }
+  .filter-nav { justify-content: center; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1200px) {
+  .product-grid { grid-template-columns: repeat(4, 1fr); }
 }

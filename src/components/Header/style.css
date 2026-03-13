@@ -15,7 +15,6 @@
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.45);
 }
 
-/* LOGO */
 
 .logo {
   font-size: 26px;
@@ -27,7 +26,6 @@
   color: #ff3c38;
 }
 
-/* NAV DESKTOP */
 
 .nav {
   display: flex;
@@ -41,7 +39,6 @@
   position: relative;
 }
 
-/* HOVER */
 
 .nav a::after {
   content: "";
@@ -58,10 +55,9 @@
   width: 100%;
 }
 
-/* MENU ICON */
 
 .menu-icon {
-  display: none; /* ESCONDE NO DESKTOP */
+  display: none; 
   font-size: 26px;
   cursor: pointer;
   align-items: center;
@@ -78,11 +74,11 @@
   transform: rotate(180deg) scale(1.1);
 }
 
-/* MOBILE */
+
 
 @media (max-width: 768px) {
   .menu-icon {
-    display: flex; /* MOSTRA NO MOBILE */
+    display: flex; 
   }
 
   .nav {
@@ -108,7 +104,7 @@
     pointer-events: auto;
   }
 
-  /* animação links */
+ 
 
   .nav a {
     opacity: 0;

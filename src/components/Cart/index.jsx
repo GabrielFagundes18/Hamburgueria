@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import { CiCircleRemove } from "react-icons/ci";
 
 const Cart = ({ isOpen, onClose, items, onRemove, total, onFinalize }) => {
   return (
@@ -8,7 +9,7 @@ const Cart = ({ isOpen, onClose, items, onRemove, total, onFinalize }) => {
       <aside className={`cart-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="cart-header">
           <h2>Meu Pedido</h2>
-          <button className="close-cart" onClick={onClose}>&times;</button>
+          <button className="close-cart" onClick={onClose}><CiCircleRemove /></button>
         </div>
 
         <div className="cart-body">
@@ -22,7 +23,7 @@ const Cart = ({ isOpen, onClose, items, onRemove, total, onFinalize }) => {
                   <h4>{item.name}</h4>
                   <span>{item.quantity}x R$ {parseFloat(item.price).toFixed(2)}</span>
                 </div>
-                <button onClick={() => onRemove(item.id)} className="btn-remove">🗑️</button>
+                <button onClick={() => onRemove(item.id)} className="btn-remove"></button>
               </div>
             ))
           )}
