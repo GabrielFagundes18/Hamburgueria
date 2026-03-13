@@ -23,7 +23,7 @@ const Cart = ({ isOpen, onClose, items, onRemove, total, onFinalize }) => {
                   <h4>{item.name}</h4>
                   <span>{item.quantity}x R$ {parseFloat(item.price).toFixed(2)}</span>
                 </div>
-                <button onClick={() => onRemove(item.id)} className="btn-remove"></button>
+                <button onClick={() => onRemove(item.id)} className="btn-remove"><CiCircleRemove /></button>
               </div>
             ))
           )}
