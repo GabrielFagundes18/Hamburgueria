@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import Button from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const slides = [
   {
@@ -41,6 +42,7 @@ const Sobre = () => {
     return () => clearInterval(intervalo);
   }, []);
 
+  const navigate = useNavigate()
   return (
     <section className="sobre" id="Sobre">
       <div className="sobre-header">
@@ -58,7 +60,7 @@ const Sobre = () => {
 
           <Button 
     variant="primary" 
-    onClick={() => window.location.href="/menu"}
+    onClick={() => navigate("/cardapio")}
   >
     Ver Cardápio
   </Button>

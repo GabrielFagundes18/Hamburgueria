@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css'
 import Button from '../../components/Button';
+import { useNavigate } from 'react-router-dom';
 const Destaque = () => {
 
   const produtos = [
@@ -24,6 +25,8 @@ const Destaque = () => {
     }
   ];
 
+
+  const navigate = useNavigate()
   return (
     <section className="menu-destaque" id='menu'>
       <div className="menu-header">
@@ -39,7 +42,7 @@ const Destaque = () => {
 
             <div className="overlay">
               <h3>{item.categoria}</h3>
-               <Button variant="primary" onClick={() => window.location.href = "/menu"}>
+               <Button variant="primary" onClick={() => navigate("/cardapio") }>
     Ir para Cardápio
   </Button>
             </div>

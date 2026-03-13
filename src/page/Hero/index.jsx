@@ -1,10 +1,11 @@
 import "./style.css";
 import bannerImg from "../../assets/bannerImg.jpg";
 import Button from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 
 const Hero = () => {
-
+  const navigate = useNavigate()
   return (
     <section className="hero" id="Hero" style={{ backgroundImage: `url(${bannerImg})` }}>
   
@@ -21,7 +22,7 @@ const Hero = () => {
             incidunt! Ipsa rem saepe sit vero ratione! Nostrum quas deleniti
             voluptate ratione?
           </p>
-         <Button variant="primary" onClick={() => window.open("https://wa.me/5511999999999")}>
+         <Button variant="primary" onClick={() => navigate('/cardapio')}>
   Fazer Pedido
 </Button>
         </div>
