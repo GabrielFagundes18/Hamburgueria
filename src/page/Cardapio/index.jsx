@@ -30,7 +30,6 @@ const navigate = useNavigate()
     carregarDados();
   }, [categoria]);
 
-  // 2. Adicionar ao Carrinho
   const adicionarAoCarrinho = (p) => {
     const existe = carrinho.find((item) => item.id === p.id);
     if (existe) {
@@ -146,7 +145,6 @@ const loadingToast = toast.loading('Enviando seu pedido para a cozinha...');
         ))}
       </div>
 
-      {/* 5. Renderização do Carrinho */}
       <Cart
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
