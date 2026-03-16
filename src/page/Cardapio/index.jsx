@@ -173,7 +173,7 @@ const Cardapio = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/orders/checkout",
+        "https://backend-hamburgueria.onrender.com/orders/checkout",
         pedidoParaBanco,
       );
       toast.success("🔥 Pedido enviado para a cozinha!", { duration: 5000 });
