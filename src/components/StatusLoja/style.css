@@ -1,0 +1,73 @@
+/* Container Principal */
+.status-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.05); /* Fundo sutil */
+  transition: all 0.3s ease;
+}
+
+/* Estado: ABERTO */
+.status-container.open {
+  color: #22c55e; /* Verde Neon */
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* Estado: FECHADO */
+.status-container.closed {
+  color: #ef4444; /* Vermelho */
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* O Ponto (Dot) */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor; /* Usa a cor do texto pai */
+}
+
+/* Animação de Pulsação (Apenas quando aberto) */
+.dot.pulse {
+  position: relative;
+}
+
+.dot.pulse::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: currentColor;
+  border-radius: 50%;
+  z-index: -1;
+  animation: ninja-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+/* Keyframes para o efeito de onda */
+@keyframes ninja-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Ajuste para modo escuro (Opcional, se o seu dashboard for Dark) */
+body.dark-mode .status-container {
+  background: rgba(255, 255, 255, 0.1);
+}

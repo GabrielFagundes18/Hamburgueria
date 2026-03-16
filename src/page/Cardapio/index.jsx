@@ -15,7 +15,7 @@ import {
 import "./style.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
+import StatusLoja from '../../components/StatusLoja';
 const Cardapio = () => {
   const [produtos, setProdutos] = useState([]);
   const [categoria, setCategoria] = useState("todos");
@@ -167,7 +167,6 @@ const Cardapio = () => {
   }))
   
 };
-console.log("OBJETO QUE VAI PARA O BACKEND:", JSON.stringify(pedidoParaBanco, null, 2));
     try {
      await axios.post("http://localhost:5000/orders/checkout", pedidoParaBanco);
       toast.success("🔥 Pedido enviado para a cozinha!", { duration: 5000 });
@@ -203,7 +202,7 @@ console.log("OBJETO QUE VAI PARA O BACKEND:", JSON.stringify(pedidoParaBanco, nu
           Ninja <span>Burger</span>
         </h1>
         <div className="cart-status">
-          <span className="online-dot"></span> Aberto
+          <StatusLoja />
         </div>
       </header>
 

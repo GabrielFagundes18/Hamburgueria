@@ -1,52 +1,13 @@
+import StatusLoja from '../../components/StatusLoja';
 import './style.css';
 import { useState, useEffect } from 'react';
 
 const Contato = () => {
 
-const checkIsOpen = () => {
-  const agora = new Date();
-  const diaSemana = agora.getDay(); // 0 (Dom) a 6 (Sab)
-  const horaAtual = agora.getHours();
-  const minutosAtuais = agora.getMinutes();
-  
-  // Transformar tudo em minutos para facilitar a conta (ex: 18:30 = 1110 min)
-  const tempoAtual = horaAtual * 60 + minutosAtuais;
-  const abertura = 18 * 60; // 18:00
-  
-  // Segunda-feira (1) o restaurante fecha
-  if (diaSemana === 1) return false;
-
-  // Sexta (5), Sábado (6) e Domingo (0) fecha à meia-noite (24:00)
-  if (diaSemana === 5 || diaSemana === 6 || diaSemana === 0) {
-    const fechamentoFimDeSemana = 24 * 60;
-    return tempoAtual >= abertura && tempoAtual < fechamentoFimDeSemana;
-  }
-
-  // Terça, Quarta e Quinta fecha às 23:00
-  const fechamentoSemana = 23 * 60;
-  return tempoAtual >= abertura && tempoAtual < fechamentoSemana;
-};
-
-const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    setIsOpen(checkIsOpen());
-    
-    // Opcional: Atualizar a cada 1 minuto sem recarregar a página
-    const interval = setInterval(() => {
-      setIsOpen(checkIsOpen());
-    }, 60000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-
-
   return (
     <section className="contato-section" id='contato'>
       <div className="contato-container">
         
-        {/* Lado Esquerdo: Informações */}
         <div className="info-box">
           <h2>Onde Estamos 📍</h2>
           
@@ -60,11 +21,7 @@ const [isOpen, setIsOpen] = useState(false);
             <h3>Horário de Funcionamento</h3>
             <p>Terça a Quinta: 18:00 - 23:00</p>
             <p>Sexta a Domingo: 18:00 - 00:00</p>
-            {isOpen ? (
-        <span className="status-open">Aberto Agora</span>
-      ) : (
-        <span className="status-closed">Fechado Agora</span>
-      )}
+            <StatusLoja/>
           </div>
 
           <div className="info-item">
