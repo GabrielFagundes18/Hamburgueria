@@ -5,27 +5,36 @@
 }
 
 :root {
-  --primary: #e63946; 
-  --primary-hover: #c12a36; 
+  /* --- CORES PRINCIPAIS (IDENTIDADE) --- */
+  --primary: #ff3e3e;            /* Vermelho "Hot" mais vibrante */
+  --primary-hover: #d63031;      /* Tom mais profundo para o clique */
+  --primary-glow: rgba(255, 62, 62, 0.2);
 
- 
-  --bg-dark: #0a0a0a; 
-  --bg-card: #161616; 
-  --bg-input: #1f1f1f; 
+  /* --- SUPERFÍCIES (DRACULA/MODERN DARK) --- */
+  --bg-dark: #080808;            /* Fundo total para dar foco aos cards */
+  --bg-card: #121212;            /* Elevação suave dos cards */
+  --bg-input: #1a1a1a;           /* Inputs levemente mais claros que o card */
+  --bg-item: #1d1d1d;            /* Itens dentro do carrinho */
 
+  /* --- ACENTOS E STATUS --- */
+  --accent-green: #00ff88;       /* Verde Neon (Sucesso/WhatsApp/Online) */
+  --accent-gold: #f1c40f;        /* Ouro para "Mais Vendidos" ou Estrelas */
+  --danger: #ff4757;             /* Para o botão de remover */
 
-  --accent-green: #2ed573; 
-  --accent-gold: #ffd700; 
+  /* --- TIPOGRAFIA --- */
+  --text-main: #ffffff;          /* Branco puro para leitura rápida */
+  --text-muted: #94a3b8;         /* Cinza azulado (mais moderno que o cinza puro) */
+  --text-on-primary: #ffffff;
 
-  
-  --text-main: #f8f9fa; 
-  --text-muted: #a0a0a0; 
+  /* --- DECORAÇÃO --- */
+  --border: #262626;             /* Borda fina e elegante */
+  --border-focus: #3d3d3d;       /* Borda de destaque */
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
 
-  --border: #252525; 
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-
-  --radius: 16px; 
-  --transition: 0.3s ease; 
+  /* --- GEOMETRIA E FLUXO --- */
+  --radius: 20px;                /* Arredondamento mais orgânico e moderno */
+  --radius-sm: 12px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 html{
   scroll-behavior: smooth;

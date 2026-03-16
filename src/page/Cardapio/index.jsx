@@ -14,7 +14,7 @@ const Cardapio = () => {
   const [showModal, setShowModal] = useState(false);
   
   // Lista de bairros que você atende (Ajuste conforme sua necessidade)
-  const BAIRROS_ATENDIDOS = ["Centro", "Vila Olimpia", "Jardins", "Moema", "Itaim Bibi", "Brooklin"];
+  const BAIRROS_ATENDIDOS = ["Centro", "Vila Olimpia", "Jardins", "Moema", "Itaim Bibi", "Brooklin","Mikail II"];
   const [entregaPermitida, setEntregaPermitida] = useState(true);
 
   const [cliente, setCliente] = useState({ 

@@ -1,50 +1,55 @@
-import { FaHamburger, FaShoppingCart, FaMotorcycle } from "react-icons/fa";
+import { FaUtensils, FaCreditCard, FaHotjar } from "react-icons/fa";
 import "./style.css";
 
 const ComoPedir = () => {
+  const fluxoVenda = [
+    {
+      id: 1,
+      icon: <FaUtensils />,
+      titulo: "Vá ao Cardápio",
+      desc: "Navegue pelas categorias e selecione seus burgers clicando no ícone de adicionar.",
+    },
+    {
+      id: 2,
+      icon: <FaCreditCard />,
+      titulo: "Finalize Online",
+      desc: "Confira seu carrinho, preencha os dados de entrega.",
+    },
+    {
+      id: 3,
+      icon: <FaHotjar />,
+      titulo: "Aguarde a Entrega",
+      desc: "Seu pedido entra em produção na hora! Prepare a mesa que estamos chegando.",
+    },
+  ];
+
   return (
     <section className="como-pedir" id="comoPedir">
-
       <div className="como-header">
-        <h2>Como <span>Pedir</span></h2>
-        <p>Peça seu Ninja Burger em poucos passos</p>
+        <h2>
+          Pedido <span>Online</span>
+        </h2>
+        <p>A experiência Ninja completa em apenas 3 passos</p>
       </div>
 
       <div className="passos">
-
-        <div className="passo">
-          <div className="icon">
-            <FaHamburger />
+        {fluxoVenda.map((item, index) => (
+          <div key={item.id} className="passo-item-container">
+            <div className="passo">
+              <div className="icon" aria-hidden="true">
+                {item.icon}
+              </div>
+              <h3>{item.titulo}</h3>
+              <p>{item.desc}</p>
+            </div>
+            
+            {/* Linha conectora entre os cards */}
+            {index < fluxoVenda.length - 1 && (
+              <div className="linha" aria-hidden="true"></div>
+            )}
           </div>
-
-          <h3>Escolha seu Burger</h3>
-          <p>Explore nosso cardápio e escolha o hambúrguer perfeito.</p>
-        </div>
-
-        <div className="linha"></div>
-
-        <div className="passo">
-          <div className="icon">
-            <FaShoppingCart />
-          </div>
-
-          <h3>Faça o Pedido</h3>
-          <p>Peça pelo site ou WhatsApp de forma rápida.</p>
-        </div>
-
-        <div className="linha"></div>
-
-        <div className="passo">
-          <div className="icon">
-            <FaMotorcycle />
-          </div>
-
-          <h3>Receba em Casa</h3>
-          <p>Entregamos seu burger quentinho na sua porta.</p>
-        </div>
-
+        ))}
       </div>
-
     </section>
   );
 };

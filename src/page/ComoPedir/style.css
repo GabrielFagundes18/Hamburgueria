@@ -1,94 +1,123 @@
-.como-pedir{
-  padding:100px 10%;
-  background:#0f0f0f;
-  color:white;
-  text-align:center;
+/* --- SEÇÃO COMO PEDIR --- */
+.como-pedir {
+  padding: 100px 10%;
+  background: var(--bg-dark);
+  text-align: center;
 }
 
-.como-header h2{
-  font-size:40px;
-  margin-bottom:10px;
+.como-header h2 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: var(--text-main);
 }
 
-.como-header span{
-  color:#ff3c38;
+.como-header span {
+  color: var(--primary);
+  text-shadow: 0 0 15px var(--primary-glow);
 }
 
-.como-header p{
-  color:#aaa;
-  margin-bottom:60px;
+.como-header p {
+  color: var(--text-muted);
+  margin-bottom: 70px;
+  font-size: 1.1rem;
 }
 
-/* PASSOS */
-
-.passos{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:30px;
-  flex-wrap:wrap;
+/* CONTAINER DOS PASSOS */
+.passos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
 }
 
-/* CARD */
-
-.passo{
-  background:#161616;
-  padding:35px;
-  border-radius:14px;
-  width:260px;
-  transition:0.3s;
-  position:relative;
+.passo-item-container {
+  display: flex;
+  align-items: center;
 }
 
-.passo:hover{
-  transform:translateY(-8px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.6);
+/* CARD DE PASSO */
+.passo {
+  background: var(--bg-card);
+  padding: 45px 30px;
+  border-radius: var(--radius);
+  width: 290px;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+  z-index: 2;
+  height: 300px;
 }
 
-/* ICON */
-
-.icon{
-  font-size:28px;
-  background:#ff3c38;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 20px;
+.passo:hover {
+  border-color: var(--primary);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
 }
 
-/* TEXT */
-
-.passo h3{
-  margin-bottom:10px;
+/* ÍCONES */
+.icon {
+  font-size: 32px;
+  background: var(--primary);
+  color: var(--text-on-primary);
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  box-shadow: 0 0 20px var(--primary-glow);
 }
 
-.passo p{
-  color:#bbb;
-  font-size:14px;
+.passo h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-/* LINHA */
-
-.linha{
-  width:80px;
-  height:3px;
-  background:#ff3c38;
+.passo p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-/* MOBILE */
+/* LINHA CONECTORA */
+.linha {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--border));
+  opacity: 0.5;
+  z-index: 1;
+}
 
-@media (max-width:768px){
+/* RESPONSIVIDADE */
+@media (max-width: 1100px) {
+  .linha {
+    width: 40px;
+  }
+}
 
-  .passos{
-    flex-direction:column;
+@media (max-width: 950px) {
+  .passos {
+    flex-direction: column;
   }
 
-  .linha{
-    width:3px;
-    height:60px;
+  .passo-item-container {
+    flex-direction: column;
+    width: 100%;
   }
 
+  .linha {
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(180deg, var(--primary), var(--border));
+    margin: 10px 0;
+  }
+
+  .passo {
+    width: 100%;
+    max-width: 350px;
+  }
 }
