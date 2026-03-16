@@ -1,5 +1,5 @@
 import React from "react";
-import StatusLoja from "../../components/StatusLoja";
+import StatusLoja from "../../components/StatusLoja"
 import "./style.css";
 
 const Contato = () => {
