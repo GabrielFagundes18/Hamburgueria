@@ -15,8 +15,12 @@ import {
 import "./style.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import StatusLoja from '../../components/StatusLoja';
+import StatusLoja from "../../components/StatusLoja";
+import { checkStoreStatus } from "../../utils/storeStatus";
+
 const Cardapio = () => {
+  const status = checkStoreStatus();
+
   const [produtos, setProdutos] = useState([]);
   const [categoria, setCategoria] = useState("todos");
   const [carrinho, setCarrinho] = useState([]);
@@ -33,6 +37,7 @@ const Cardapio = () => {
     "Brooklin",
     "Mikail II",
   ];
+
   const [entregaPermitida, setEntregaPermitida] = useState(true);
 
   const [cliente, setCliente] = useState({
@@ -137,38 +142,40 @@ const Cardapio = () => {
 
   const finalizarPedido = async (e) => {
     e.preventDefault();
+    if (!status.isOpen) return toast.error("Loja fechada no momento.");
     if (!entregaPermitida) return toast.error("Não entregamos no seu bairro.");
     if (carrinho.length === 0) return toast.error("Carrinho vazio!");
 
     setSending(true);
+    const pedidoParaBanco = {
+      customer_name: cliente.nome,
+      customer_whatsapp: cliente.whatsapp,
+      total_price: Number(total.toFixed(2)),
+      status: "pendente",
+      cep: cliente.cep,
+      address_street: cliente.endereco,
+      address_number: cliente.numero,
+      address_complement: cliente.complemento || "N/A",
+      address_neighborhood: cliente.bairro,
+      payment_method: cliente.pagamento,
+      change_details:
+        cliente.pagamento === "Dinheiro"
+          ? `Troco para R$ ${cliente.troco}`
+          : "N/A",
+      notes: cliente.observacao || "Sem observações",
+      items: carrinho.map((item) => ({
+        product_id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: Number(parseFloat(item.price).toFixed(2)),
+      })),
+    };
 
-   const pedidoParaBanco = {
-  customer_name: cliente.nome,
-  customer_whatsapp: cliente.whatsapp,
-  total_price: Number(total.toFixed(2)),
-  status: "pendente",
-  
-  
-  cep: cliente.cep,
-  address_street: cliente.endereco,
-  address_number: cliente.numero,
-  address_complement: cliente.complemento || "N/A",
-  address_neighborhood: cliente.bairro,
-  payment_method: cliente.pagamento,
-  change_details: cliente.pagamento === "Dinheiro" ? `Troco para R$ ${cliente.troco}` : "N/A",
-  notes: cliente.observacao || "Sem observações",
-  
-  
-  items: carrinho.map(item => ({ 
-    product_id: item.id, 
-    name: item.name, 
-    quantity: item.quantity, 
-    price: Number(parseFloat(item.price).toFixed(2)) 
-  }))
-  
-};
     try {
-     await axios.post("http://localhost:5000/orders/checkout", pedidoParaBanco);
+      await axios.post(
+        "http://localhost:5000/orders/checkout",
+        pedidoParaBanco,
+      );
       toast.success("🔥 Pedido enviado para a cozinha!", { duration: 5000 });
       setCarrinho([]);
       setShowModal(false);
@@ -193,10 +200,17 @@ const Cardapio = () => {
 
   return (
     <div className="cardapio-page">
+      {/* 1. Aviso de Loja Fechada no Topo */}
+      {!status.isOpen && (
+        <div className="aviso-fechado">
+          Loja fechada no momento. Horário de funcionamento: Terça a Quinta das
+          18:00 às 23:00 e Sexta a Domingo das 18:00 às 00:00.
+        </div>
+      )}
+
       <header className="main-header">
         <button className="cart-voltar" onClick={() => navigate("/")}>
-          {" "}
-          <FaReply />{" "}
+          <FaReply />
         </button>
         <h1 className="logo">
           Ninja <span>Burger</span>
@@ -272,16 +286,27 @@ const Cardapio = () => {
           )}
         </main>
 
+        {/* 2. Componente de Carrinho com Trava de Abertura do Modal */}
         <Cart
           items={carrinho}
           onRemove={(id) =>
             setCarrinho((prev) => prev.filter((i) => i.id !== id))
           }
           total={total}
-          onFinalize={() => setShowModal(true)}
+          onFinalize={() => {
+            if (!status.isOpen) {
+              toast.error(
+                "O mestre ninja está descansando. Voltamos às 18:00!",
+                { icon: "🏮" },
+              );
+              return;
+            }
+            setShowModal(true);
+          }}
         />
       </div>
 
+      {/* 3. Modal de Finalização com Trava no Botão Confirmar */}
       {showModal && (
         <div className="modal-overlay">
           <form className="modal-form" onSubmit={finalizarPedido}>
@@ -377,7 +402,7 @@ const Cardapio = () => {
                   <FaEdit /> Observações do Pedido
                 </label>
                 <textarea
-                  placeholder="Ex: Tirar cebola, ponto da carne, etc..."
+                  placeholder="Ex: Tirar cebola..."
                   value={cliente.observacao}
                   onChange={(e) =>
                     setCliente({ ...cliente, observacao: e.target.value })
@@ -403,7 +428,6 @@ const Cardapio = () => {
                   <option value="Pix">Pix</option>
                   <option value="Dinheiro">Dinheiro</option>
                 </select>
-
                 {cliente.pagamento === "Dinheiro" && (
                   <div className="troco-container animated fadeIn">
                     <label className="sub-label">
@@ -438,10 +462,12 @@ const Cardapio = () => {
                 <button
                   type="submit"
                   className="confirm"
-                  disabled={!entregaPermitida || sending}
+                  disabled={!entregaPermitida || sending || !status.isOpen}
                 >
                   {sending ? (
                     <FaSpinner className="spinner" />
+                  ) : !status.isOpen ? (
+                    "Loja Fechada"
                   ) : (
                     "Enviar Pedido"
                   )}

@@ -5,14 +5,12 @@ export const checkStoreStatus = () => {
   const minutosAtuais = agora.getMinutes();
   
   const tempoAtual = horaAtual * 60 + minutosAtuais;
-  const abertura = 18 * 60; // 18:00
+  const abertura = 18 * 60; // 18:00 (em minutos)
 
-  // Segunda-feira (1) FECHADO
-  if (diaSemana === 1) {
-    return { isOpen: false, message: "Fechado - Abre Terça às 18:00" };
-  }
+  // 1. Segunda-feira: Sempre FECHADO
+  if (diaSemana === 1) return { isOpen: false, message: "Fechado - Abre Terça às 18h" };
 
-  // Define fechamento: Sexta, Sábado e Domingo às 00:00. Outros dias às 23:00.
+  // 2. Define o fechamento: Sex, Sab e Dom às 00h (24:00). Outros dias às 23h.
   const fechamento = (diaSemana === 5 || diaSemana === 6 || diaSemana === 0) 
     ? 24 * 60 
     : 23 * 60;
@@ -21,7 +19,6 @@ export const checkStoreStatus = () => {
 
   return {
     isOpen: isOpen,
-    message: isOpen ? "Aberto Agora" : "Fechado no momento",
-    nextOpening: "Diariamente das 18h às 23h (FDS até 00h)"
+    message: isOpen ? "Aberto Agora" : "Fechado no momento"
   };
 };
