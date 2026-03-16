@@ -1,49 +1,49 @@
 import React from 'react';
-import './style.css';
+
 import { CiCircleRemove } from "react-icons/ci";
 
-const Cart = ({ isOpen, onClose, items, onRemove, total, onFinalize }) => {
+const Cart = ({ items, onRemove, total, onFinalize }) => {
   return (
-    <>
-      {isOpen && <div className="cart-overlay" onClick={onClose}></div>}
-      <aside className={`cart-sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="cart-header">
-          <h2>Meu Pedido</h2>
-          <button className="close-cart" onClick={onClose}><CiCircleRemove /></button>
-        </div>
+    <aside className="cart-sidebar-integrated">
+      <div className="cart-header-integrated">
+        <h2>Meu Pedido</h2>
+      </div>
 
-        <div className="cart-body">
-          {items.length === 0 ? (
-            <p className="empty-msg">O carrinho está vazio.</p>
-          ) : (
-            items.map(item => (
-              <div key={item.id} className="cart-item">
-                <img src={item.image_url} alt={item.name} />
-                <div className="item-info">
-                  <h4>{item.name}</h4>
-                  <span>{item.quantity}x R$ {parseFloat(item.price).toFixed(2)}</span>
-                </div>
-                <button onClick={() => onRemove(item.id)} className="btn-remove"><CiCircleRemove /></button>
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className="cart-footer">
-          <div className="total">
-            <span>Total:</span>
-            <span>R$ {total.toFixed(2)}</span>
+      <div className="cart-body">
+        {items.length === 0 ? (
+          <div className="empty-msg-container">
+            <p className="empty-msg">Seu carrinho está vazio.</p>
           </div>
-          <button 
-            className="btn-checkout" 
-            disabled={items.length === 0}
-            onClick={onFinalize}
-          >
-            Finalizar Pedido
-          </button>
+        ) : (
+          items.map(item => (
+            <div key={item.id} className="cart-item">
+              <img src={item.image_url} alt={item.name} />
+              <div className="item-info">
+                <h4>{item.name}</h4>
+                <span>{item.quantity}x R$ {parseFloat(item.price).toFixed(2)}</span>
+              </div>
+              <button onClick={() => onRemove(item.id)} className="btn-remove">
+                <CiCircleRemove />
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="cart-footer">
+        <div className="total">
+          <span>Total:</span>
+          <span>R$ {total.toFixed(2)}</span>
         </div>
-      </aside>
-    </>
+        <button 
+          className="btn-checkout" 
+          disabled={items.length === 0}
+          onClick={onFinalize}
+        >
+          Finalizar Pedido
+        </button>
+      </div>
+    </aside>
   );
 };
 
