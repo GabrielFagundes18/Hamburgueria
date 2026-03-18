@@ -75,7 +75,7 @@ useEffect(() => {
   };
 
   carregarDados();
-}, [categoria, API]); 
+}, [categoria]); 
 
   const adicionarAoCarrinho = (p) => {
     setCarrinho((prev) => {
