@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {API} from "../../api/api.js"
 import Cart from "../../components/Cart";
 import {
   FaReply,
@@ -30,12 +31,6 @@ const Cardapio = () => {
 
   const BAIRROS_ATENDIDOS = [
     "Centro",
-    "Vila Olimpia",
-    "Jardins",
-    "Moema",
-    "Itaim Bibi",
-    "Brooklin",
-    "Mikail II",
   ];
 
   const [entregaPermitida, setEntregaPermitida] = useState(true);
@@ -59,24 +54,25 @@ const Cardapio = () => {
     document.body.style.overflow = showModal ? "hidden" : "unset";
   }, [showModal]);
 
-  useEffect(() => {
-    const carregarDados = async () => {
-      setLoading(true);
-      try {
-        const url =
-          categoria === "todos"
-            ? "https://backend-hamburgueria.onrender.com/products"
-            : `https://backend-hamburgueria.onrender.com/products?category=${categoria}`;
-        const res = await axios.get(url);
-        setProdutos(res.data);
-      } catch (err) {
-        toast.error("Erro ao carregar o cardápio.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    carregarDados();
-  }, [categoria]);
+useEffect(() => {
+  const carregarDados = async () => {
+    setLoading(true);
+    try {
+      const res = await API.get("/products", { 
+  params: categoria !== "todos" ? { category: categoria } : {}
+});
+      
+      setProdutos(res.data);
+    } catch (err) {
+      console.error("Erro na API:", err); 
+      toast.error("Erro ao carregar o cardápio.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  carregarDados();
+}, [categoria, API]); 
 
   const adicionarAoCarrinho = (p) => {
     setCarrinho((prev) => {
@@ -172,10 +168,7 @@ const Cardapio = () => {
     };
 
     try {
-      await axios.post(
-        "https://backend-hamburgueria.onrender.com/orders/checkout",
-        pedidoParaBanco,
-      );
+      await API.post("/orders/checkout", pedidoParaBanco);
       toast.success("🔥 Pedido enviado para a cozinha!", { duration: 5000 });
       setCarrinho([]);
       setShowModal(false);
