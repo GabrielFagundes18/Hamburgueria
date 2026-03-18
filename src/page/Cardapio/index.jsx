@@ -61,6 +61,9 @@ useEffect(() => {
       const res = await API.get("/products", { 
   params: categoria !== "todos" ? { category: categoria } : {}
 });
+
+
+
       
       setProdutos(res.data);
     } catch (err) {
