@@ -200,7 +200,6 @@ const Cardapio = () => {
 
   return (
     <div className="cardapio-page">
-      {/* 1. Aviso de Loja Fechada no Topo */}
       {!status.isOpen && (
         <div className="aviso-fechado">
           Loja fechada no momento. Horário de funcionamento: Terça a Quinta das
@@ -286,7 +285,6 @@ const Cardapio = () => {
           )}
         </main>
 
-        {/* 2. Componente de Carrinho com Trava de Abertura do Modal */}
         <Cart
           items={carrinho}
           onRemove={(id) =>
@@ -306,7 +304,6 @@ const Cardapio = () => {
         />
       </div>
 
-      {/* 3. Modal de Finalização com Trava no Botão Confirmar */}
       {showModal && (
         <div className="modal-overlay">
           <form className="modal-form" onSubmit={finalizarPedido}>
@@ -346,6 +343,17 @@ const Cardapio = () => {
                 <label>
                   <FaMapMarkerAlt /> Endereço Ninja
                 </label>
+                <span
+                  style={{
+                    fontSize: "15px",
+                    color: "#fff",
+                    marginBottom: "5px",
+                    display: "block",
+                  }}
+                >
+                  Dica: Use o CEP <b>07010001</b> (Centro de Guarulhos) para
+                  testar a entrega.
+                </span>
                 <input
                   type="text"
                   placeholder="CEP"

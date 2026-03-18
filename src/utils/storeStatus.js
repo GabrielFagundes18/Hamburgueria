@@ -5,7 +5,7 @@ export const checkStoreStatus = () => {
   const minutosAtuais = agora.getMinutes();
   
   const tempoAtual = horaAtual * 60 + minutosAtuais;
-  const abertura = 18 * 60; // 18:00 (em minutos)
+  const abertura = 10 * 60; // 18:00 (em minutos)
 
   // 1. Segunda-feira: Sempre FECHADO
   if (diaSemana === 1) return { isOpen: false, message: "Fechado - Abre Terça às 18h" };
