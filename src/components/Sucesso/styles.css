@@ -1,0 +1,127 @@
+.sucesso-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #050505;
+  padding: 20px;
+}
+
+.sucesso-card {
+  background: #111;
+  max-width: 450px;
+  width: 100%;
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid #222;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.icon-box {
+  margin-bottom: 20px;
+}
+
+.check-icon {
+  font-size: 80px;
+  color: #00ff88;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+}
+
+.sucesso-card h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.sucesso-card p {
+  color: #888;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.info-box {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.info-box span {
+  display: block;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.info-box ul {
+  list-style: none;
+  padding: 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.info-box li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.info-box li::before {
+  content: "•";
+  color: #00ff88;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.actions-sucesso {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-whatsapp:hover {
+  background: #1eb954;
+  transform: scale(1.02);
+}
+
+.btn-voltar {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.3s;
+}
+
+.btn-voltar:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
