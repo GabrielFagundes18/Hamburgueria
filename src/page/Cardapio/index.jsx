@@ -155,7 +155,7 @@ const Cardapio = () => {
     };
 
     try {
-      console.log("Enviando pedido:", payload);
+      
       await API.post("/orders/checkout", payload);
       toast.success("Pedido enviado com sucesso!");
       setCarrinho([]);
