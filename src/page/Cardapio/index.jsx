@@ -1,39 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import {API} from "../../api/api.js"
+import { API } from "../../api/api.js";
 import Cart from "../../components/Cart";
 import {
-  FaReply,
   FaSpinner,
   FaPlus,
   FaMinus,
+  FaSearch,
+  FaUtensils,
+  FaArrowLeft,
   FaCheckCircle,
-  FaMapMarkerAlt,
-  FaCreditCard,
-  FaMoneyBillWave,
-  FaEdit,
+  FaTimes,
 } from "react-icons/fa";
 import "./style.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import StatusLoja from "../../components/StatusLoja";
-import { checkStoreStatus } from "../../utils/storeStatus";
 
 const Cardapio = () => {
-  const status = checkStoreStatus();
-
+  const navigate = useNavigate();
   const [produtos, setProdutos] = useState([]);
   const [categoria, setCategoria] = useState("todos");
-  const [carrinho, setCarrinho] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const BAIRROS_ATENDIDOS = [
-    "Centro",
-  ];
-
-  const [entregaPermitida, setEntregaPermitida] = useState(true);
+  const [carrinho, setCarrinho] = useState(() => {
+    const saved = localStorage.getItem("@NinjaBurger:cart");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [cliente, setCliente] = useState({
     nome: "",
@@ -44,234 +39,228 @@ const Cardapio = () => {
     numero: "",
     complemento: "",
     pagamento: "",
-    troco: "",
     observacao: "",
+    troco: "",
   });
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.setItem("@NinjaBurger:cart", JSON.stringify(carrinho));
+  }, [carrinho]);
 
   useEffect(() => {
-    document.body.style.overflow = showModal ? "hidden" : "unset";
-  }, [showModal]);
-
-useEffect(() => {
-  const carregarDados = async () => {
-    setLoading(true);
-    try {
-      const res = await API.get("/products", { 
-  params: categoria !== "todos" ? { category: categoria } : {}
-});
-
-
-
-      
-      setProdutos(res.data);
-    } catch (err) {
-      console.error("Erro na API:", err); 
-      toast.error("Erro ao carregar o cardápio.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  carregarDados();
-}, [categoria]); 
-
-  const adicionarAoCarrinho = (p) => {
-    setCarrinho((prev) => {
-      const existe = prev.find((item) => item.id === p.id);
-      if (existe) {
-        return prev.map((item) =>
-          item.id === p.id ? { ...item, quantity: item.quantity + 1 } : item,
-        );
+    const fetchData = async () => {
+      try {
+        const { data } = await API.get("/products");
+        setProdutos(data);
+      } catch (err) {
+        toast.error("Erro ao carregar cardápio.");
+      } finally {
+        setLoading(false);
       }
-      toast.dismiss();
-      toast.success(`${p.name} adicionado!`, { icon: "🍔" });
-      return [...prev, { ...p, quantity: 1 }];
-    });
-  };
+    };
+    fetchData();
+  }, []);
 
-  const removerUmItem = (id) => {
-    setCarrinho((prev) => {
-      const item = prev.find((i) => i.id === id);
-      if (item?.quantity > 1) {
-        return prev.map((i) =>
-          i.id === id ? { ...i, quantity: i.quantity - 1 } : i,
-        );
-      }
-      return prev.filter((i) => i.id !== id);
-    });
-  };
-
-  const total = carrinho.reduce(
-    (acc, item) => acc + parseFloat(item.price) * item.quantity,
-    0,
+  const categorias = useMemo(
+    () => ["todos", ...new Set(produtos.map((p) => p.category))],
+    [produtos],
   );
 
-  const handleCEPChange = async (e) => {
-    const valor = e.target.value.replace(/\D/g, "");
-    setCliente((prev) => ({ ...prev, cep: valor }));
+  const produtosFiltrados = useMemo(() => {
+    const termo = searchTerm.toLowerCase();
+    return produtos.filter(
+      (p) =>
+        (categoria === "todos" || p.category === categoria) &&
+        (p.name?.toLowerCase().includes(termo) ||
+          p.description?.toLowerCase().includes(termo)),
+    );
+  }, [produtos, categoria, searchTerm]);
 
-    if (valor.length === 8) {
-      const loadCep = toast.loading("Buscando endereço...");
-      try {
-        const res = await axios.get(`https://viacep.com.br/ws/${valor}/json/`);
-        if (res.data.erro) {
-          toast.error("CEP não encontrado.", { id: loadCep });
-          return;
+  const subtotal = useMemo(
+    () => carrinho.reduce((acc, i) => acc + Number(i.price) * i.quantity, 0),
+    [carrinho],
+  );
+
+  const handleCartAction = (product, action) => {
+    setCarrinho((prev) => {
+      const itemExists = prev.find((item) => item.id === product.id);
+      if (action === "add") {
+        if (itemExists) {
+          return prev.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          );
         }
-        const { logradouro, bairro } = res.data;
-        const atende = BAIRROS_ATENDIDOS.some(
-          (b) => b.toLowerCase() === (bairro?.toLowerCase() || ""),
+        return [...prev, { ...product, quantity: 1 }];
+      }
+      if (action === "remove" && itemExists) {
+        if (itemExists.quantity > 1) {
+          return prev.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity - 1 }
+              : item,
+          );
+        }
+        return prev.filter((item) => item.id !== product.id);
+      }
+      return prev;
+    });
+  };
+
+  const handleCEP = async (cep) => {
+    const valor = cep.replace(/\D/g, "");
+    setCliente((prev) => ({ ...prev, cep: valor }));
+    if (valor.length === 8) {
+      try {
+        const { data } = await axios.get(
+          `https://viacep.com.br/ws/${valor}/json/`,
         );
+        if (data.erro) return toast.error("CEP inválido.");
+
         setCliente((prev) => ({
           ...prev,
-          endereco: logradouro,
-          bairro: bairro,
+          endereco: data.logradouro,
+          bairro: data.bairro,
         }));
-        setEntregaPermitida(atende);
-        atende
-          ? toast.success("Endereço ok!", { id: loadCep })
-          : toast.error("Área não atendida.", { id: loadCep });
-      } catch (err) {
-        toast.error("Erro na busca.", { id: loadCep });
+      } catch {
+        toast.error("Erro ao buscar CEP.");
       }
     }
   };
 
   const finalizarPedido = async (e) => {
     e.preventDefault();
-    if (!status.isOpen) return toast.error("Loja fechada no momento.");
-    if (!entregaPermitida) return toast.error("Não entregamos no seu bairro.");
-    if (carrinho.length === 0) return toast.error("Carrinho vazio!");
-
+    if (carrinho.length === 0) return toast.error("Seu carrinho está vazio!");
     setSending(true);
-    const pedidoParaBanco = {
+
+    const payload = {
+      type: "website",
       customer_name: cliente.nome,
       customer_whatsapp: cliente.whatsapp,
-      total_price: Number(total.toFixed(2)),
-      status: "pendente",
+      total_price: subtotal,
       cep: cliente.cep,
       address_street: cliente.endereco,
       address_number: cliente.numero,
-      address_complement: cliente.complemento || "N/A",
+      address_complement: cliente.complemento,
       address_neighborhood: cliente.bairro,
       payment_method: cliente.pagamento,
-      change_details:
-        cliente.pagamento === "Dinheiro"
-          ? `Troco para R$ ${cliente.troco}`
-          : "N/A",
+      change_details: cliente.troco,
       notes: cliente.observacao || "Sem observações",
-      items: carrinho.map((item) => ({
-        product_id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: Number(parseFloat(item.price).toFixed(2)),
+      items: carrinho.map((i) => ({
+        product_id: i.id,
+        quantity: i.quantity,
+        price: Number(i.price),
       })),
     };
 
     try {
-      await API.post("/orders/checkout", pedidoParaBanco);
-      toast.success("🔥 Pedido enviado para a cozinha!", { duration: 5000 });
+      
+      await API.post("/orders/checkout", payload);
+      toast.success("Pedido enviado com sucesso!");
       setCarrinho([]);
+      localStorage.removeItem("@NinjaBurger:cart");
       setShowModal(false);
-      setCliente({
-        nome: "",
-        whatsapp: "",
-        cep: "",
-        endereco: "",
-        bairro: "",
-        numero: "",
-        complemento: "",
-        pagamento: "",
-        troco: "",
-        observacao: "",
-      });
-    } catch (err) {
-      toast.error(err.response?.data?.message || "❌ Erro ao enviar pedido.");
+      navigate("/sucesso");
+    } catch {
+      toast.error("Erro ao processar pedido.");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <div className="cardapio-page">
-      {!status.isOpen && (
-        <div className="aviso-fechado">
-          Loja fechada no momento. Horário de funcionamento: Terça a Quinta das
-          18:00 às 23:00 e Sexta a Domingo das 18:00 às 00:00.
-        </div>
-      )}
-
-      <header className="main-header">
-        <button className="cart-voltar" onClick={() => navigate("/")}>
-          <FaReply />
-        </button>
-        <h1 className="logo">
-          Ninja <span>Burger</span>
-        </h1>
-        <div className="cart-status">
-          <StatusLoja />
+    <div className="cardapio-container">
+      <header className="navbar">
+        <div className="nav-content">
+          <button className="btn-back" onClick={() => navigate("/")}>
+            <FaArrowLeft />
+          </button>
+          <div className="brand">
+            <FaUtensils className="logo-icon" />
+            <h1>
+              Ninja <span>Burger</span>
+            </h1>
+          </div>
+          <div className="header-spacer" />
         </div>
       </header>
 
-      <div className="cardapio-container">
-        <main className="products-section">
-          <nav className="filter-nav">
-            {[
-              "todos",
-              "Hambúrgueres",
-              "Combo",
-              "Bebidas",
-              "Acompanhamentos",
-            ].map((cat) => (
+      <div className="main-layout">
+        <aside className="filters-sidebar">
+          <div className="search-wrapper">
+            <FaSearch />
+            <input
+              placeholder="Buscar no cardápio..."
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <nav className="categories">
+            <h3>Categorias</h3>
+            {categorias.map((cat) => (
               <button
                 key={cat}
-                className={categoria === cat ? "active" : ""}
+                className={categoria === cat ? "cat-btn active" : "cat-btn"}
                 onClick={() => setCategoria(cat)}
               >
                 {cat}
               </button>
             ))}
           </nav>
+        </aside>
 
+        <main className="products-feed">
           {loading ? (
-            <div className="loading-container">
-              <FaSpinner className="spinner" />
-              <p>Preparando cardápio...</p>
+            <div className="loading-state">
+              <FaSpinner className="spin-icon" />
             </div>
           ) : (
-            <div className="product-grid">
-              {produtos.map((item) => {
-                const itemNoCarrinho = carrinho.find((c) => c.id === item.id);
+            <div className="products-grid">
+              {produtosFiltrados.map((p) => {
+                const qnty = carrinho.find((c) => c.id === p.id)?.quantity || 0;
                 return (
-                  <div key={item.id} className="product-card">
-                    <img src={item.image_url} alt={item.name} loading="lazy" />
-                    <div className="product-details">
-                      <h3>{item.name}</h3>
-                      <p>{item.description}</p>
+                  <div
+                    key={p.id}
+                    className={`product-card ${qnty > 0 ? "selected" : ""}`}
+                  >
+                    <div className="img-container">
+                      <img
+                        src={p.image_url || "/placeholder.png"}
+                        alt={p.name}
+                      />
+                      {qnty > 0 && <span className="item-badge">{qnty}</span>}
+                    </div>
+                    <div className="product-info">
+                      <h3>{p.name}</h3>
+                      <p className="description">{p.description}</p>
                       <div className="product-footer">
                         <span className="price">
-                          R$ {parseFloat(item.price).toFixed(2)}
+                          R$ {Number(p.price).toFixed(2)}
                         </span>
-                        {itemNoCarrinho ? (
-                          <div className="quantity-control-card">
-                            <button onClick={() => removerUmItem(item.id)}>
-                              <FaMinus />
+                        <div className="actions">
+                          {qnty > 0 ? (
+                            <div className="qty-selector">
+                              <button
+                                onClick={() => handleCartAction(p, "remove")}
+                              >
+                                <FaMinus />
+                              </button>
+                              <span>{qnty}</span>
+                              <button
+                                onClick={() => handleCartAction(p, "add")}
+                              >
+                                <FaPlus />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              className="add-btn"
+                              onClick={() => handleCartAction(p, "add")}
+                            >
+                              Adicionar
                             </button>
-                            <span>{itemNoCarrinho.quantity}</span>
-                            <button onClick={() => adicionarAoCarrinho(item)}>
-                              <FaPlus />
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            className="add-btn"
-                            onClick={() => adicionarAoCarrinho(item)}
-                          >
-                            <FaPlus />
-                          </button>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -281,204 +270,112 @@ useEffect(() => {
           )}
         </main>
 
-        <Cart
-          items={carrinho}
-          onRemove={(id) =>
-            setCarrinho((prev) => prev.filter((i) => i.id !== id))
-          }
-          total={total}
-          onFinalize={() => {
-            if (!status.isOpen) {
-              toast.error(
-                "O mestre ninja está descansando. Voltamos às 18:00!",
-                { icon: "🏮" },
-              );
-              return;
-            }
-            setShowModal(true);
-          }}
-        />
+        <aside className="cart-sidebar">
+          <Cart
+            items={carrinho}
+            total={subtotal}
+            onRemove={(id) => setCarrinho((c) => c.filter((i) => i.id !== id))}
+            onFinalize={() => setShowModal(true)}
+          />
+        </aside>
       </div>
 
       {showModal && (
         <div className="modal-overlay">
-          <form className="modal-form" onSubmit={finalizarPedido}>
-            <div className="modal-header-ux">
+          <div className="modal-card-checkout">
+            <div className="modal-header">
               <h2>
                 <FaCheckCircle /> Finalizar Pedido
               </h2>
-              <p>Preencha os detalhes da entrega</p>
+              <button onClick={() => setShowModal(false)} className="close-btn">
+                <FaTimes />
+              </button>
             </div>
-
-            <div className="modal-body">
-              <section className="form-section">
-                <label>
-                  <FaPlus /> Dados do Cliente
-                </label>
+            <form onSubmit={finalizarPedido} className="checkout-form">
+              <div className="form-group">
                 <input
-                  type="text"
                   placeholder="Nome"
                   required
-                  value={cliente.nome}
                   onChange={(e) =>
                     setCliente({ ...cliente, nome: e.target.value })
                   }
                 />
                 <input
-                  type="text"
                   placeholder="WhatsApp"
                   required
-                  value={cliente.whatsapp}
                   onChange={(e) =>
                     setCliente({ ...cliente, whatsapp: e.target.value })
                   }
                 />
-              </section>
-
-              <section className="form-section">
-                <label>
-                  <FaMapMarkerAlt /> Endereço Ninja
-                </label>
-                <span
-                  style={{
-                    fontSize: "15px",
-                    color: "#fff",
-                    marginBottom: "5px",
-                    display: "block",
-                  }}
-                >
-                  Dica: Use o CEP <b>07010001</b> (Centro de Guarulhos) para
-                  testar a entrega.
-                </span>
+              </div>
+              <div className="form-row">
                 <input
-                  type="text"
                   placeholder="CEP"
                   required
-                  maxLength="8"
-                  value={cliente.cep}
-                  onChange={handleCEPChange}
+                  onChange={(e) => handleCEP(e.target.value)}
+                  maxLength={8}
                 />
+                <input placeholder="Bairro" value={cliente.bairro} readOnly />
+              </div>
+              <input placeholder="Endereço" value={cliente.endereco} readOnly />
+              <div className="form-row">
                 <input
-                  type="text"
-                  placeholder="Endereço"
+                  placeholder="Nº"
                   required
-                  value={cliente.endereco}
-                  readOnly
-                  className="readonly-input"
-                />
-                <div className="input-row">
-                  <input
-                    type="text"
-                    placeholder="Nº"
-                    required
-                    value={cliente.numero}
-                    onChange={(e) =>
-                      setCliente({ ...cliente, numero: e.target.value })
-                    }
-                  />
-                  <input
-                    type="text"
-                    placeholder="Comp."
-                    value={cliente.complemento}
-                    onChange={(e) =>
-                      setCliente({ ...cliente, complemento: e.target.value })
-                    }
-                  />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Bairro"
-                  required
-                  value={cliente.bairro}
-                  readOnly
-                  className="readonly-input"
-                />
-              </section>
-
-              {!entregaPermitida && (
-                <div className="delivery-badge-error">
-                  Bairro não atendido para entrega.
-                </div>
-              )}
-
-              <section className="form-section">
-                <label>
-                  <FaEdit /> Observações do Pedido
-                </label>
-                <textarea
-                  placeholder="Ex: Tirar cebola..."
-                  value={cliente.observacao}
                   onChange={(e) =>
-                    setCliente({ ...cliente, observacao: e.target.value })
+                    setCliente({ ...cliente, numero: e.target.value })
                   }
-                  rows="3"
-                  className="modal-textarea"
                 />
-              </section>
+                <input
+                  placeholder="Compl."
+                  onChange={(e) =>
+                    setCliente({ ...cliente, complemento: e.target.value })
+                  }
+                />
+              </div>
 
-              <section className="form-section">
-                <label>
-                  <FaCreditCard /> Forma de Pagamento
-                </label>
+              <textarea
+                placeholder="Ex: Tirar cebola, ponto da carne..."
+                className="checkout-input-area"
+                onChange={(e) =>
+                  setCliente({ ...cliente, observacao: e.target.value })
+                }
+              />
+
+              <div className="form-row">
                 <select
                   required
-                  value={cliente.pagamento}
                   onChange={(e) =>
                     setCliente({ ...cliente, pagamento: e.target.value })
                   }
                 >
-                  <option value="">Selecione...</option>
-                  <option value="Cartão">Cartão (Máquina)</option>
+                  <option value="">Forma de Pagamento</option>
                   <option value="Pix">Pix</option>
+                  <option value="Cartão">Cartão</option>
                   <option value="Dinheiro">Dinheiro</option>
                 </select>
                 {cliente.pagamento === "Dinheiro" && (
-                  <div className="troco-container animated fadeIn">
-                    <label className="sub-label">
-                      <FaMoneyBillWave /> Precisa de troco para quanto?
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ex: 100,00"
-                      value={cliente.troco}
-                      onChange={(e) =>
-                        setCliente({ ...cliente, troco: e.target.value })
-                      }
-                    />
-                  </div>
+                  <input
+                    placeholder="Troco para quanto?"
+                    onChange={(e) =>
+                      setCliente({ ...cliente, troco: e.target.value })
+                    }
+                  />
                 )}
-              </section>
-            </div>
-
-            <div className="modal-footer-ux">
-              <div className="total-display">
-                <span>Total a Pagar:</span>
-                <strong>R$ {total.toFixed(2)}</strong>
               </div>
-              <div className="modal-btns">
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={() => setShowModal(false)}
-                >
-                  Voltar
-                </button>
-                <button
-                  type="submit"
-                  className="confirm"
-                  disabled={!entregaPermitida || sending || !status.isOpen}
-                >
-                  {sending ? (
-                    <FaSpinner className="spinner" />
-                  ) : !status.isOpen ? (
-                    "Loja Fechada"
-                  ) : (
-                    "Enviar Pedido"
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
+              <button
+                type="submit"
+                className="btn-send-order"
+                disabled={sending}
+              >
+                {sending ? (
+                  <FaSpinner className="spin-icon" />
+                ) : (
+                  `CONFIRMAR PEDIDO - R$ ${subtotal.toFixed(2)}`
+                )}
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>
